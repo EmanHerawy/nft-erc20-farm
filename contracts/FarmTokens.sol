@@ -10,8 +10,7 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
     using SafeERC20 for IERC20;
     uint256 private _cap;
     uint256 private _mintedPoints;
-    uint256 private _tokenCount;
-    struct tokenRewardDetails {
+     struct tokenRewardDetails {
         uint256 priceInPoint;
         address owner;
      }
@@ -37,9 +36,7 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
         return _cap;
     }
 
-    function rewardCount() external view returns (uint256) {
-        return _tokenCount;
-    }
+ 
 
     /// @notice Only woner can call it
 
