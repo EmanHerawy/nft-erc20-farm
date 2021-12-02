@@ -69,7 +69,7 @@ contract StartfiFarm is UserPools {
     function claim(address _token, uint256 _amount) external {
 _claimReward(_token, _msgSender(), _amount);    }
 
-    /// @notice if user wants to claim the nft reward and the user's rewards balance of group of pools is more than or equal the required points for that nft, user can call this function rather than redeem -> claim scenario where user has to send many transaction to get the nft
+    /// @notice if user wants to claim a cetain amount of a token reward and the user's rewards balance of group of pools is more than or equal the required points for that nft, user can call this function rather than redeem -> claim scenario where user has to send many transaction to get the token
     /// @dev only staker can call it
 
     // /// @param _tokens array of pool tokens address
@@ -172,7 +172,7 @@ _claimReward(_token, _msgSender(), _amount);    }
         _addPool(_token, _pointsPerTokenInSec, cap_, _totalShare, _totalShareBase);
     }
 
-    /// @notice add the nft rewards that users will claim
+    /// @notice add the token rewards that users will claim
     /// @dev only owner can call it
     /// @dev nft point increase the RSFTI cap
     /// @param  _amount amount of token to be deposited
@@ -189,7 +189,7 @@ _claimReward(_token, _msgSender(), _amount);    }
         _addTokenReward(_amount, _priceInPoint, _token, owner_);
     }
   
-    /// @notice to protect nfts from being locked in the contract , owner can call it after the time to release and return it back to the original owner as long as minted point is less than the reward `_priceInPoint`
+    /// @notice to protect tokens from being locked in the contract , owner can call it after the time to release and return it back to the original owner as long as minted point is less than the reward `_priceInPoint`
     /// @dev only  owner can call it
     /// @dev called only after the `_timeToRelease`
 
