@@ -188,4 +188,12 @@ _claimReward(_token, _msgSender(), _amount);    }
      ) external {
         _addTokenReward(_amount, _priceInPoint, _token, owner_);
     }
+  
+    /// @notice to protect nfts from being locked in the contract , owner can call it after the time to release and return it back to the original owner as long as minted point is less than the reward `_priceInPoint`
+    /// @dev only  owner can call it
+    /// @dev called only after the `_timeToRelease`
+
+    function releaseRewardToken(address _token) external {
+        _releaseRewardToken(_token);
+    }
 }

@@ -134,4 +134,8 @@ contract FarmPools is FarmTokens {
         IERC721(_nftAddress).safeTransferFrom(from, to, tokenId);
         return true;
     }
+        function _releaseRewardToken(address _token) internal override onlyOwner returns (bool) {
+        require(_timeToRelease <= block.timestamp, 'Farm is running');
+        return super._releaseRewardToken(_token);
+    }
 }

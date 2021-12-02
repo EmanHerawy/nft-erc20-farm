@@ -10,21 +10,16 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
     using SafeERC20 for IERC20;
     uint256 private _cap;
     uint256 private _mintedPoints;
-     struct tokenRewardDetails {
+    struct tokenRewardDetails {
         uint256 priceInPoint;
         address owner;
-     }
+    }
     // token address to details
     mapping(address => tokenRewardDetails) internal rewardTokens;
 
     event RewardReleased(address indexed owner, address indexed token, uint256 amount, uint256 timestamp);
     event RewardClaimed(address indexed claimer, address indexed token, uint256 amount, uint256 timestamp);
-    event RewardAdded(
-        address indexed owner,
-        address indexed token,
-         uint256 priceInPoint,
-        uint256 timestamp
-    );
+    event RewardAdded(address indexed owner, address indexed token, uint256 priceInPoint, uint256 timestamp);
 
     constructor() ERC20('Startfi Reward Token', 'RSTFI') {}
 
@@ -36,8 +31,6 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
         return _cap;
     }
 
- 
-
     /// @notice Only woner can call it
 
     function _addTokenReward(
@@ -45,7 +38,7 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
         uint256 _priceInPoint,
         address _token,
         address owner_
-     ) internal virtual onlyOwner {
+    ) internal virtual onlyOwner {
         require(
             _priceInPoint != 0 && _amount != 0 && _token != address(0) && owner_ != address(0),
             'Zero values not allowed'
@@ -80,5 +73,16 @@ contract FarmTokens is Ownable, ERC20, ERC721Holder, ReentrancyGuard {
         require(_mintedPoints + amount <= _cap, 'Mint: cap exceeded');
         _mintedPoints += amount;
         super._mint(account, amount);
+    }
+
+    function _releaseRewardToken(address _token) internal virtual returns (bool) {
+        require(rewardTokens[_token].priceInPoint > 0, 'Non exist');
+        require(ERC20.totalSupply() >= rewardTokens[_token].priceInPoint, 'Can not release, users can sell it');
+        address owner_ = rewardTokens[_token].owner;
+        uint256 _amount = IERC20(_token).balanceOf(address(this));
+        require(_amount > 0, 'No Token to withdraw');
+        emit RewardReleased(owner_, _token, _amount, block.timestamp);
+        IERC20(_token).safeTransfer(owner_, _amount);
+        return true;
     }
 }
